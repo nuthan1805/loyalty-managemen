@@ -1,83 +1,44 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { faHome, faMoneyCheckAlt, faHistory } from "@fortawesome/free-solid-svg-icons";
-import { Button, Layout, Menu, theme } from "antd";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
-import logo from "./logo.svg";
-import Dashboard from "./components/Dashboard";
-import TransactionForm from "./components/TransactionForm";
-import TransactionHistory from "./components/TransactionHistory";
-
-const { Header, Sider, Content } = Layout;
+import MainLayout from "./Layout";
+import Login from "./components/Login";
+import Registration from "./components/Registration";
 
 const App = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
+  const handleRegister = () => {
+    setIsLoggedIn(true);
+  };
+
   return (
     <Router>
-      <Layout style={{ minHeight: "100vh" }}>
-        <Sider trigger={null} collapsible collapsed={collapsed}>
-          <div className="logo-container">
-            <img src={logo} alt="Logo" className="logo" />
-            {!collapsed && <span className="app-name">Mobilytix Rewards</span>}
-          </div>
-          <Menu
-            theme="dark"
-            mode="inline"
-            defaultSelectedKeys={["1"]}
-          >
-            <Menu.Item key="1" icon={<FontAwesomeIcon icon={faHome} />}>
-              <Link to="/">Dashboard</Link>
-            </Menu.Item>
-            <Menu.Item key="2" icon={<FontAwesomeIcon icon={faMoneyCheckAlt} />}>
-              <Link to="/transaction-form">Transaction Form</Link>
-            </Menu.Item>
-            <Menu.Item key="3" icon={<FontAwesomeIcon icon={faHistory} />}>
-              <Link to="/transaction-history">Transaction History</Link>
-            </Menu.Item>
-          </Menu>
-        </Sider>
-        <Layout>
-          <Header
-            style={{
-              padding: 0,
-              background: colorBgContainer,
-            }}
-            title="Loyalty Management"
-          >
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: "16px",
-                width: 64,
-                height: 64,
-              }}
-            />Loyalty Management
-
-          </Header>
-          <Content
-            style={{
-              margin: "24px 16px",
-              padding: 24,
-              minHeight: 280,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/transaction-form" element={<TransactionForm />} />
-              <Route path="/transaction-history" element={<TransactionHistory />} />
-            </Routes>
-          </Content>
-        </Layout>
-      </Layout>
+      <Routes>
+        <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route
+          path="/register"
+          element={<Registration onRegister={handleRegister} />}
+        />
+        <Route
+          path="/*"
+          element={
+            isLoggedIn ? (
+              <MainLayout onLogout={handleLogout} />
+            ) : (
+              <Login onLogin={handleLogin} />
+            )
+          }
+        />
+      </Routes>
     </Router>
   );
 };

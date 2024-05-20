@@ -1,0 +1,35 @@
+.registration-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5;
+  }
+  
+  .registration-box {
+    max-width: 300px;
+    margin: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .registration-box h2 {
+    text-align: center;
+    color: #1890ff;
+  }
+  
+  .registration-box p {
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  .registration-box p a {
+    color: #1890ff;
+  }
+  
+  .registration-box p a:hover {
+    text-decoration: underline;
+  }
+  

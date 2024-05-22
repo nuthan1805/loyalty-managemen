@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import "./App.css";
 import MainLayout from "./Layout";
 import Login from "./components/Login";
@@ -14,6 +14,7 @@ const App = () => {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    localStorage.removeItem("token");
   };
 
   const handleRegister = () => {
@@ -23,21 +24,9 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route
-          path="/register"
-          element={<Registration onRegister={handleRegister} />}
-        />
-        <Route
-          path="/*"
-          element={
-            isLoggedIn ? (
-              <MainLayout onLogout={handleLogout} />
-            ) : (
-              <Login onLogin={handleLogin} />
-            )
-          }
-        />
+        <Route path="/login" element={isLoggedIn ? <Navigate to="/" /> : <Login onLogin={handleLogin} />} />
+        <Route path="/register" element={isLoggedIn ? <Navigate to="/" /> : <Registration onRegister={handleRegister} />} />
+        <Route path="/*" element={isLoggedIn ? <MainLayout onLogout={handleLogout} /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );

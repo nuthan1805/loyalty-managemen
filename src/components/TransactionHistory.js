@@ -1,33 +1,104 @@
-import React, { useState } from 'react';
-
-import { Input, Button, Card } from "antd";
+import React, { useState, useEffect } from 'react';
+import { Input, Button, Card, Table, Tag } from "antd";
+import axios from 'axios';
+import moment from 'moment';
+import './TransactionHistory.css';
 
 const TransactionHistory = () => {
+  const [memberId, setMemberId] = useState('');
+  const [transactions, setTransactions] = useState([]);
+  const [showTable, setShowTable] = useState(false);
+
+  const columns = [
+    {
+      title: 'Member ID',
+      dataIndex: 'member_id',
+      key: 'member_id',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Points Updated',
+      dataIndex: 'points_updated',
+      key: 'points_updated',
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
+      render: (type) => (
+        <Tag color={type === 'credit' ? 'blue' : 'orange'}>
+          {type === 'credit' ? 'Credited' : 'Debited'}
+        </Tag>
+      ),
+    },
+    {
+      title: 'Updated By',
+      dataIndex: 'updated_by',
+      key: 'updated_by',
+    },
+    {
+      title: 'Date',
+      dataIndex: 'updated_at',
+      key: 'updated_at',
+      render: (text) => moment(text).format('YYYY-MM-DD HH:mm:ss'),
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: (status) => (
+        <Tag color={status === 'success' ? 'green' : 'red'}>
+          {status.toUpperCase()}
+        </Tag>
+      ),
+    },
+  ];
+
+  const handleViewHistory = () => {
+    if (memberId) {
+      axios.get(`http://localhost:3000/transactions/history/${memberId}`)
+        .then(response => {
+          const lastFiveTransactions = response.data.slice(0, 5); // Fix to get the last 5 transactions
+          setTransactions(lastFiveTransactions);
+          setShowTable(true);
+        })
+        .catch(error => {
+          console.error('Error fetching transactions:', error);
+        });
+    }
+  };
 
   return (
-    <div>
+    <div className="transaction-history">
       <h1>View Transaction History</h1>
-      <Input
-        placeholder="Enter Member ID"
-        
-        style={{ marginBottom: "10px" }}
-      />
+      <div className="input-group">
+        <Input
+          placeholder="Enter Member ID"
+          value={memberId}
+          onChange={(e) => setMemberId(e.target.value)}
+          style={{ marginRight: "10px" }}
+        />
+        <Button type="primary" onClick={handleViewHistory}>
+          View History
+        </Button>
+      </div>
 
-      <Button type="primary" style={{ marginBottom: "20px" }}>
-        View History
-      </Button>
-
-      <Card
-        title="Card title"
-        bordered={false}
-        style={{
-          width: "100%",
-        }}
-      >
-        <p>Txn 1</p>
-        <p>Txn 2</p>
-        <p>Txn 3</p>
-      </Card>
+      {showTable && (
+        <Card
+          title="Transaction History"
+          bordered={false}
+          style={{
+            width: "100%",
+            backgroundColor: '#f0f2f5',
+          }}
+        >
+          <Table columns={columns} dataSource={transactions} rowKey="id" pagination={false} />
+        </Card>
+      )}
     </div>
   );
 };

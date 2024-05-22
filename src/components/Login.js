@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Input, Button, message, Form } from 'antd';
 import axios from 'axios';
-import './Login.css'; // Import custom CSS for styling
+import './Login.css';
 
 const Login = ({ onLogin }) => {
   const [loading, setLoading] = useState(false);
@@ -14,6 +14,8 @@ const Login = ({ onLogin }) => {
       const response = await axios.post('http://localhost:3000/auth/login', values);
       message.success('Login successful');
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('username', response.data.username);
+      localStorage.setItem('email', response.data.email);
       onLogin();
       navigate('/');
     } catch (error) {
@@ -28,8 +30,8 @@ const Login = ({ onLogin }) => {
       <div className="login-box">
         <h2>Login</h2>
         <Form onFinish={onFinish}>
-          <Form.Item name="email" rules={[{ required: true, message: 'Please input your email!' }]}>
-            <Input placeholder="Email" />
+          <Form.Item name="identifier" rules={[{ required: true, message: 'Please input your username or email!' }]}>
+            <Input placeholder="Username or Email" />
           </Form.Item>
           <Form.Item name="password" rules={[{ required: true, message: 'Please input your password!' }]}>
             <Input.Password placeholder="Password" />

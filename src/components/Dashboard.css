@@ -1,0 +1,36 @@
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    height: 100%;
+  }
+ 
+  .kpi-tile {
+    backdrop-filter: blur(20px);
+  }
+ 
+  @media (max-width: 600px) {
+    .chart-container {
+      height: 200px;
+    }
+   
+    .wide-chart {
+      height: 300px;
+    }
+   
+    .small-chart {
+      height: 150px;
+    }
+  }
+
+
+  .kpi-chart {
+    height: 200px;
+  }
+ 
+  .small-chart {
+    height: 150px;
+  }
+ 
+ 

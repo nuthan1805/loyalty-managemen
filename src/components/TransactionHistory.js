@@ -26,6 +26,16 @@ const TransactionHistory = () => {
       key: 'points_updated',
     },
     {
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
+      render: (type) => (
+        <Tag color={type === 'credit' ? 'blue' : 'orange'}>
+          {type === 'credit' ? 'Credited' : 'Debited'}
+        </Tag>
+      ),
+    },
+    {
       title: 'Updated By',
       dataIndex: 'updated_by',
       key: 'updated_by',
@@ -52,9 +62,8 @@ const TransactionHistory = () => {
     if (memberId) {
       axios.get(`http://localhost:3000/transactions/history/${memberId}`)
         .then(response => {
-          const lastFiveTransactions = response.data.slice(5);
-          setTransactions(response.data);
-          console.log('')
+          const lastFiveTransactions = response.data.slice(0, 5); // Fix to get the last 5 transactions
+          setTransactions(lastFiveTransactions);
           setShowTable(true);
         })
         .catch(error => {

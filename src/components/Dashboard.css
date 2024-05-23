@@ -9,6 +9,14 @@
   .kpi-tile {
     backdrop-filter: blur(20px);
   }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .dashboard-container {
+    font-family: 'Montserrat', sans-serif;
+  }
  
   @media (max-width: 600px) {
     .chart-container {

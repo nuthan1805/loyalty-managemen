@@ -1,56 +1,49 @@
-/* .transaction-history {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  } */
-  
-  .transaction-history h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #001529;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #f0f2f5;
+}
+
+.transaction-history {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.main-card {
+  width: 100%;
+  padding: 20px;
   }
-  
-  .input-group {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .transaction-history .ant-input {
-    width: 300px;
-    font-size: 16px;
-    border-radius: 4px;
-  }
-  
-  .transaction-history .ant-btn-primary {
-    font-size: 16px;
-    border-radius: 4px;
-    background-color: #1890ff;
-    border-color: #1890ff;
-    height: 40px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .transaction-history .ant-card {
-    margin-top: 20px;
-    background-color: #f0f2f5;
-    border-radius: 8px;
-  }
-  
-  .transaction-history .ant-table-thead > tr > th {
-    background-color: #fafafa;
-  }
-  
-  .transaction-history .ant-table-tbody > tr > td {
-    padding: 8px;
-  }
-  
-  .transaction-history .ant-tag {
-    font-size: 14px;
-  }
-  
+
+.input-group {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+
+.content-container {
+  margin-top: 10px;
+}
+
+.table-card {
+  margin-top: 10px;
+  height: calc(100vh - 350px); 
+
+}
+
+.ant-table .custom-table {
+  font-size: 10px !important; 
+}
+
+.background-image {
+  width: 100%;
+  height: calc(100vh - 350px); 
+  opacity: 0.6;
+  object-fit: contain;
+}

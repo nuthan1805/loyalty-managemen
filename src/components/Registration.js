@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { Input, Button, message, Form } from 'antd';
 import axios from 'axios';
 import './Registration.css';
-
+ 
 const Registration = () => {
   const [loading, setLoading] = useState(false);
-
+ 
   const onFinish = async (values) => {
     setLoading(true);
     try {
@@ -19,11 +19,11 @@ const Registration = () => {
       setLoading(false);
     }
   };
-
+ 
   return (
     <div className="registration-container">
       <div className="registration-box">
-        <h2>Register</h2>
+        <h3>REGISTER NOW</h3>
         <Form onFinish={onFinish}>
           <Form.Item name="username" rules={[{ required: true, message: 'Please input your username!' }]}>
             <Input placeholder="Username" />
@@ -35,7 +35,7 @@ const Registration = () => {
             <Input.Password placeholder="Password" />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading}>
+            <Button type="primary" htmlType="submit" loading={loading} className='register-button'>
               Register
             </Button>
           </Form.Item>
@@ -45,5 +45,5 @@ const Registration = () => {
     </div>
   );
 };
-
+ 
 export default Registration;

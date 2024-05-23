@@ -1,35 +1,53 @@
+body, html {
+  height: 100%;
+  margin-top:0%;
+ 
+ 
+}
+ 
 .login-container {
-    display: flex;
+  display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f2f5;
-  }
-  
-  .login-box {
-    max-width: 300px;
-    margin: auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-  }
-  
-  .login-box h2 {
-    text-align: center;
-    color: #1890ff;
-  }
-  
-  .login-box p {
-    margin-top: 10px;
-    text-align: center;
-  }
-  
-  .login-box p a {
-    color: #1890ff;
-  }
-  
-  .login-box p a:hover {
-    text-decoration: underline;
-  }
-  
+    align-items: end;
+    height: 90vh;
+    flex-direction: column;
+    padding-right: 5%;
+    background-image:url('../assets/register.png');
+    background-repeat:no-repeat;
+    background-size: 145vh;
+}
+ 
+.login-box {
+  background: rgba(255, 255, 255, 0.4);
+  padding: 1rem;
+  padding-top: -1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+  width: 100%;
+  max-width: 380px;
+}
+ 
+.login-box:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(13, 13, 13, 0.3);
+}
+ 
+.login-box h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: black;
+}
+ 
+.login-button {
+  width: 100%;
+}
+ 
+.login-box p {
+  text-align: center;
+  margin-top: 1rem;
+}
+ 
+.login-box a {
+  color: #1890ff;
+}

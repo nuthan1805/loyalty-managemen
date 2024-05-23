@@ -1,35 +1,56 @@
+body, html {
+  height: 100%;
+  margin: 0;
+}
+ 
 .registration-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f2f5;
+    flex-direction: column;
+    justify-content: start;
+    padding-top: 10%;
+    align-items: end;
+    height: 75vh;
+    background-image: url('../assets/login_image.svg');
+    background-size: 120vh;
+    background-repeat: no-repeat;
+    padding-right: 10%;
+    background-position-x: 40px;
+    background-position-y: -50px;
+
   }
-  
+ 
   .registration-box {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1rem;
+    padding-top: -1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+    width: 100%;
+    height: 340px;
     max-width: 300px;
-    margin: auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
   }
-  
-  .registration-box h2 {
+
+  .register-button{
+    width: 100%;
+  }
+ 
+  .registration-box h3 {
     text-align: center;
-    color: #1890ff;
+    color: black;
   }
-  
+ 
   .registration-box p {
     margin-top: 10px;
     text-align: center;
   }
-  
+ 
   .registration-box p a {
     color: #1890ff;
+    text-align: center;
   }
-  
-  .registration-box p a:hover {
-    text-decoration: underline;
+ 
+  .registration-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   }
-  

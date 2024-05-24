@@ -46,6 +46,8 @@ const { Header, Sider, Content } = Layout;
 const MainLayout = ({ onLogout }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [darkTheme, setDarkTheme] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
+  const [hideDescription, setHideDescription] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -58,6 +60,35 @@ const MainLayout = ({ onLogout }) => {
     if (storedUsername) {
       setUsername(storedUsername);
     }
+
+    const handleResize = () => {
+      if (window.innerWidth < 800) {
+        setCollapsed(true);
+      } else {
+        setCollapsed(false);
+      }
+
+      if (window.innerWidth < 671) {
+        setIsMobileView(true);
+      } else {
+        setIsMobileView(false);
+      }
+
+      if (window.innerWidth < 800) {
+        setHideDescription(true);
+      } else {
+        setHideDescription(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -94,6 +125,26 @@ const MainLayout = ({ onLogout }) => {
 
   const profileMenu = (
     <Menu>
+      {isMobileView && (
+        <>
+          <Menu.Item key="notifications">
+            <Tooltip title="No notifications yet">
+              <FontAwesomeIcon
+                icon={faBell}
+                style={{
+                  marginRight: "10px",
+                  fontSize: "16px",
+                }}
+              />
+              Notifications
+            </Tooltip>
+          </Menu.Item>
+          <Menu.Item key="username">
+            <UserOutlined />
+            <span style={{ marginLeft: "10px" }}>{username}</span>
+          </Menu.Item>
+        </>
+      )}
       <Menu.Item key="themeSwitch">
         <Switch size="small" checked={darkTheme} onChange={toggleTheme} />
         <span style={{ marginLeft: "10px" }}>Dark Mode</span>
@@ -108,7 +159,7 @@ const MainLayout = ({ onLogout }) => {
   const pathToTitle = {
     "/": "Dashboard",
     "/transaction-form": "Transaction Form",
-    "/transaction-history": "Transaction History",
+    "/transaction-history": "Transactions",
     "/add-member": "Manage Member",
     "/operation": "Points Operation",
   };
@@ -118,7 +169,7 @@ const MainLayout = ({ onLogout }) => {
     "/transaction-form": "Initiate, record, and manage transactions seamlessly",
     "/transaction-history":
       "View detailed logs of all past transactions and activities.",
-    "/add-member": "Efficiently add, update, or remove team members as needed.",
+    "/add-member": "Efficiently add, update, or remove members as needed.",
     "/operation":
       "Update points effortlessly with credit or debit transactions.",
   };
@@ -205,7 +256,7 @@ const MainLayout = ({ onLogout }) => {
             zIndex: "5",
             borderBottom: "1px solid #ECECEC",
             width: collapsed ? "calc(100% - 80px)" : "calc(100% - 200px)",
-            transition: "0.3s ease",
+            transition: "0.3s ease"
           }}
         >
           <div>
@@ -220,7 +271,8 @@ const MainLayout = ({ onLogout }) => {
               }}
             />
 
-            <span
+            <span 
+            className="manage-title"
               style={{
                 marginLeft: "10px",
                 color: "#394054",
@@ -231,35 +283,52 @@ const MainLayout = ({ onLogout }) => {
               {currentTitle}
             </span>
             <br></br>
-            <span
-              style={{
-                fontSize: "12px",
-                position: "absolute",
-                marginTop: "-45px",
-                marginLeft: "75px",
-                color: "#888",
-              }}
-            >
-              {currentDescription}
-            </span>
+            {!hideDescription && (
+              <span
+                style={{
+                  fontSize: "12px",
+                  position: "absolute",
+                  marginTop: "-45px",
+                  marginLeft: "75px",
+                  color: "#888",
+                }}
+              >
+                {currentDescription}
+              </span>
+            )}
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <Tooltip title="No notifications yet">
-              <FontAwesomeIcon
-                icon={faBell}
-                style={{
-                  marginRight: "20px",
-                  fontSize: "20px",
-                  cursor: "pointer",
-                }}
-              />
-            </Tooltip>
-            <Dropdown overlay={profileMenu} trigger={["hover"]}>
-              <Avatar style={{ cursor: "pointer" }} src={profileImage} />
-            </Dropdown>
-            <span style={{ marginLeft: "10px", color: "black" }}>
-              {username}
-            </span>
+            {!isMobileView && (
+              <>
+                <Tooltip title="No notifications yet">
+                  <FontAwesomeIcon
+                    icon={faBell}
+                    style={{
+                      marginRight: "20px",
+                      fontSize: "20px",
+                      cursor: "pointer",
+                    }}
+                  />
+                </Tooltip>
+                <Dropdown overlay={profileMenu} trigger={["hover"]}>
+                  <Avatar style={{ cursor: "pointer" }} src={profileImage} />
+                </Dropdown>
+                <span
+                  style={{
+                    marginLeft: "10px",
+                    paddingRight: "10px",
+                    color: "black",
+                  }}
+                >
+                  {username}
+                </span>
+              </>
+            )}
+            {isMobileView && (
+              <Dropdown overlay={profileMenu} trigger={["hover"]}>
+                <Avatar style={{ cursor: "pointer" }} src={profileImage} />
+              </Dropdown>
+            )}
           </div>
         </Header>
         <Content

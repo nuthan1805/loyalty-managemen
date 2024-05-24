@@ -11,6 +11,10 @@ import {
 } from "antd";
 import axios from "axios";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import "./AddMember.css";
+
+
+// style = {{color: darkTheme ? "white" : "black"}}
 
 const { confirm } = Modal;
 
@@ -149,25 +153,30 @@ const AddMemberForm = () => {
       title: "Member ID",
       dataIndex: "member_id",
       key: "member_id",
+      responsive: ['xs', 'sm', 'md', 'lg'],
     },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      responsive: ['xs', 'sm', 'md', 'lg'],
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
+      responsive: ['xs', 'sm', 'md', 'lg'],
     },
     {
       title: "Points",
       dataIndex: "points",
       key: "points",
+      responsive: ['xs', 'sm', 'md', 'lg'],
     },
     {
       title: "Action",
       key: "action",
+      responsive: ['xs', 'sm', 'md', 'lg'],
       render: (text, record) => (
         <Space size="middle">
           <Tooltip title="Delete member">
@@ -186,9 +195,12 @@ const AddMemberForm = () => {
       <Input.Search
         placeholder="Search members"
         onChange={handleSearch}
-        style={{ width: 250, float: "right", marginBottom: "10px" }}
+        style={{ width: 250, float: "right", marginBottom: "10px"
+
+        }}
+        
       />
-      <Button
+      <Button className="member-btn"
         type="primary"
         onClick={handleAddMember}
         style={{ marginBottom: "30px" }}
@@ -201,6 +213,7 @@ const AddMemberForm = () => {
         loading={loading}
         rowKey="id"
         pagination={{ pageSize: 4 }}
+        scroll={{ x: 'max-content' }}
       />
 
       <Modal

@@ -47,3 +47,17 @@ body, html {
   opacity: 0.6;
   object-fit: contain;
 }
+
+@media(max-width: 420px){
+
+  .input-group{
+    display: block !important;
+  }
+  .history-btn{
+    margin-top: 10px !important;
+    margin-left: 20px !important;
+  }
+  h3{
+    font-size: 14px !important;
+  }
+}

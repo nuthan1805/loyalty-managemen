@@ -192,11 +192,16 @@ body, html {
   color: #999;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .login-content-container {
     flex-direction: row;
   }
   .login-popup-background-container {
     display: block;
+  }
+  .top-right-logo{
+    bottom :220px !important;
+    width: 40px !important;
+    height: 40px !important;
   }
 }

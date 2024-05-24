@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Input, Button, message, Form, Card } from 'antd';
 import axios from 'axios';
@@ -11,7 +11,21 @@ import {
 
 const Login = ({ onLogin }) => {
   const [loading, setLoading] = useState(false);
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 769); // Track screen size
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth > 769);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup event listener on unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -40,23 +54,26 @@ const Login = ({ onLogin }) => {
       <div className="main-background-container"></div>
       <div className="main-container-popup">
         <div className="login-content-container">
-          <div className="login-popup-background-container">
-            <div className="login-mobilytix-logo">
-              MobiLytix <span className="trade-mark">™</span>
+          {isLargeScreen && (
+            <div className="login-popup-background-container">
+              <div className="login-mobilytix-logo">
+                MobiLytix <span className="trade-mark">™</span>
+              </div>
+              <div className="login-mobilytix-description">Rewards</div>
+              <div className="login-background-container">
+                <img src={newBackgroundImage} alt="Side" />
+              </div>
             </div>
-            <div className="login-mobilytix-description">Rewards</div>
-            <div className="login-background-container">
-              <img src={newBackgroundImage} alt="Side" />
+          )}
+          {isLargeScreen && (
+            <div className="divider">
+              <div className="divider-line"></div>
+              <div className="divider-highlight"></div>
+              <div className="divider-line"></div>
             </div>
-          </div>
-          <div className="divider">
-            <div className="divider-line"></div>
-            <div className="divider-highlight"></div>
-            <div className="divider-line"></div>
-
-          </div>
+          )}
           <div className="login-popup-form-container">
-          <div className="top-right-logo"></div>
+            <div className="top-right-logo"></div>
 
             <Card className="login-box">
               <h3>Welcome,</h3>

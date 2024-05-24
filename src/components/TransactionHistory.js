@@ -30,21 +30,25 @@ const TransactionHistory = () => {
       title: "Member ID",
       dataIndex: "member_id",
       key: "member_id",
+      responsive: ['xs', 'sm', 'md', 'lg']
     },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      responsive: ['xs', 'sm', 'md', 'lg']
     },
     {
       title: "Points Updated",
       dataIndex: "points_updated",
       key: "points_updated",
+      responsive: ['xs', 'sm', 'md', 'lg']
     },
     {
       title: "Type",
       dataIndex: "type",
       key: "type",
+      responsive: ['xs', 'sm', 'md', 'lg'],
       render: (type) => (
         <Tag color={type === "credit" ? "blue" : "orange"}>
           {type === "credit" ? "Credited" : "Debited"}
@@ -55,17 +59,20 @@ const TransactionHistory = () => {
       title: "Updated By",
       dataIndex: "updated_by",
       key: "updated_by",
+      responsive: ['xs', 'sm', 'md', 'lg']
     },
     {
       title: "Date",
       dataIndex: "updated_at",
       key: "updated_at",
+      responsive: ['xs', 'sm', 'md', 'lg'],
       render: (text) => moment(text).format("YYYY-MM-DD HH:mm:ss"),
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      responsive: ['xs', 'sm', 'md', 'lg'],
       render: (status) => (
         <Tag color={status === "success" ? "green" : "red"}>
           {status.toUpperCase()}
@@ -122,6 +129,7 @@ const TransactionHistory = () => {
             ))}
           </Select>
           <Button
+            className="history-btn"
             type="primary"
             onClick={handleViewHistory}
             style={{ flexShrink: 0 }}
@@ -138,7 +146,9 @@ const TransactionHistory = () => {
                 rowKey="id"
                 pagination={false}
                 className="custom-table"
+                scroll={{ x: 'max-content' }}
               />
+
             </Card>
           ) : (
             <img

@@ -1,5 +1,11 @@
+*{
+  font-family: 'Montserrat', sans-serif;
+}
+
+
 .logo-container {
   height: 64px;
+  font-size: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -7,10 +13,12 @@
 }
 
 .logo {
-  width: 40px;
+  width: 30px;
+  height: 28px;
 }
 
 .app-name {
-  color: #fff;
-  
+  font-weight: 600;
+  color: black;
 }
+

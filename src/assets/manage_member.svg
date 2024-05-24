@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="clubs" transform="translate(-358 -720)">
+    <g id="Boundary" transform="translate(358 720)" fill="#8d919d" stroke="rgba(0,0,0,0)" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <g id="Group_22669" data-name="Group 22669" transform="translate(-822.174 -7790.5)">
+      <path id="Path_5443" data-name="Path 5443" d="M12.6,7.4l1,3.8L10.3,8.477,7.007,11.2l1-3.727L5,4.965,8.87,4.75,10.3,1.167,11.736,4.75l3.87.215L12.6,7.4" transform="translate(1176.174 8522.418)" fill="#faa61a"/>
+      <path id="Path_gift" data-name="Path / gift" d="M4.656,1.93A1.364,1.364,0,0,0,3.345,3.776H1.907A.907.907,0,0,0,1,4.683V5.59a.454.454,0,0,0,.454.454H5.536V4.683h.907V6.044h4.082a.454.454,0,0,0,.454-.454V4.683a.907.907,0,0,0-.907-.907H8.633A1.36,1.36,0,0,0,6.248,2.524l-.259.345-.259-.354A1.312,1.312,0,0,0,4.656,1.93m-.027.939a.454.454,0,1,1-.454.454.455.455,0,0,1,.454-.454m2.721,0a.454.454,0,1,1-.454.454.455.455,0,0,1,.454-.454M1.454,6.5v3.628a.907.907,0,0,0,.907.907H9.618a.907.907,0,0,0,.907-.907V6.5H6.443v3.628H5.536V6.5Z" transform="translate(1192.626 8522.274)" fill="#4b93ff"/>
+      <path id="Path_account" data-name="Path / account" d="M8.9,4A2.45,2.45,0,1,1,6.45,6.45,2.45,2.45,0,0,1,8.9,4m0,6.124c2.707,0,4.9,1.1,4.9,2.45V13.8H4V12.574C4,11.221,6.193,10.124,8.9,10.124Z" transform="translate(1177.577 8508.601)" fill="#ed1c24"/>
+      <g id="MDI_wrench" data-name="MDI / wrench" transform="translate(1192.174 8512.5)">
+        <g id="Boundary-2" data-name="Boundary" fill="#38c8a1" stroke="rgba(0,0,0,0)" stroke-width="1" opacity="0">
+          <rect width="11" height="11" stroke="none"/>
+          <rect x="0.5" y="0.5" width="10" height="10" fill="none"/>
+        </g>
+        <path id="Path_wrench" data-name="Path / wrench" d="M9.87,8.374l-3.731-3.7a2.592,2.592,0,0,0-.615-2.8,2.728,2.728,0,0,0-3.034-.528L4.254,3.091,3.024,4.31,1.22,2.563A2.6,2.6,0,0,0,1.753,5.57a2.648,2.648,0,0,0,2.829.61l3.731,3.7a.4.4,0,0,0,.574,0l.943-.935A.364.364,0,0,0,9.87,8.374Z" transform="translate(0.044 -0.1)" fill="#38c8a1"/>
+      </g>
+    </g>
+  </g>
+</svg>

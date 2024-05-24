@@ -4,6 +4,7 @@ import { Line, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, LineElement, BarElement, PointElement, LinearScale, Title, CategoryScale, ArcElement, Tooltip, Legend } from 'chart.js';
 import supabase from '../SupabaseClient';
 import './Dashboard.css'; 
+import dashboard_image from "../assets/14245105_MyApril10.svg"
 
 ChartJS.register(LineElement, BarElement, PointElement, LinearScale, Title, CategoryScale, ArcElement, Tooltip, Legend);
 
@@ -187,12 +188,12 @@ const Dashboard = () => {
   };
 
   return (
-    <Container>
+    <Container className="dashboard-container" style={{ fontFamily: 'Montserrat' }}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <Card>
             <CardContent>
-              <img src="https://img.freepik.com/free-vector/gradient-b2b-illustration_23-2149322240.jpg?t=st=1716208578~exp=1716212178~hmac=f96e17b7ada9d691cbe07cb6b8c15904c74e4369d4646f9facfec1e3a2f8d337&w=826" alt="Descriptive Alt Text" style={{ width: '100%', height: 'auto', borderRadius: '10px' }} />
+              <img src={dashboard_image} alt="Descriptive Alt Text" style={{ width: '100%', height: 'auto', borderRadius: '10px' }} />
             </CardContent>
           </Card>
         </Grid>
@@ -201,7 +202,7 @@ const Dashboard = () => {
             <CardContent>
               <Typography variant="h6" align="center">Total Members</Typography>
               <Typography variant="h4" align="center">{totalMembers}</Typography>
-              <Box className="chart-container kpi-chart">
+              <Box className="chart-container kpi-chart" style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)', padding: '20px', borderRadius: '10px' }}>
                 <Line data={totalMembersData} />
               </Box>
             </CardContent>
@@ -211,7 +212,7 @@ const Dashboard = () => {
           <Card className="glass-card">
             <CardContent>
               <Typography variant="h6">Transaction Trends Over Time</Typography>
-              <Box className="chart-container wide-chart">
+              <Box className="chart-container wide-chart" style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)', padding: '20px', borderRadius: '10px' }}>
                 <Line className="" data={transactionTrendData} options={{ responsive: true, plugins: { tooltip: { mode: 'index', intersect: false } } }} />
               </Box>
             </CardContent>
@@ -220,8 +221,8 @@ const Dashboard = () => {
         <Grid item xs={12} md={6}>
           <Card className="glass-card">
             <CardContent>
-              <Typography variant="h6">Top Users</Typography>
-              <Box className="chart-container small-chart">
+              <Typography variant="h6" style={{textAlign:'center'}}>Top Users</Typography>
+              <Box className="chart-container small-chart" style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)', padding: '10px', borderRadius: '10px', marginTop:'45px' }}>
                 <Bar data={topUsersData} options={{ indexAxis: 'y' }} />
               </Box>
             </CardContent>
@@ -232,7 +233,7 @@ const Dashboard = () => {
             <CardContent>
               <Typography variant="h6" align="center">Total Points Distributed</Typography>
               <Typography variant="h4" align="center">{totalPoints}</Typography>
-              <Box className="chart-container kpi-chart">
+              <Box className="chart-container kpi-chart" style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)', padding: '20px', borderRadius: '10px' }}>
                 <Bar data={totalPointsData} />
               </Box>
             </CardContent>

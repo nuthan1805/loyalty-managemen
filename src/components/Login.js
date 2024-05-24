@@ -4,6 +4,10 @@ import { Input, Button, message, Form, Card } from 'antd';
 import axios from 'axios';
 import './Login.css';
 import newBackgroundImage from '../assets/login_2.svg'; 
+import {
+  LockFilled,
+  UserOutlined,
+} from "@ant-design/icons";
 
 const Login = ({ onLogin }) => {
   const [loading, setLoading] = useState(false);
@@ -60,13 +64,13 @@ const Login = ({ onLogin }) => {
                   name="identifier"
                   rules={[{ required: true, message: 'Please input your username or email!' }]}
                 >
-                  <Input placeholder="Username or Email" className="textbox" />
+                  <Input placeholder="Username or Email" className="textbox" prefix={<UserOutlined/>}/>
                 </Form.Item>
                 <Form.Item
                   name="password"
                   rules={[{ required: true, message: 'Please input your password!' }]}
                 >
-                  <Input.Password placeholder="Password" className="textbox" />
+                  <Input.Password placeholder="Password" className="textbox" prefix={<LockFilled />}/>
                 </Form.Item>
                 <Form.Item>
                   <Button type="primary" htmlType="submit" loading={loading} className="comviva-button">

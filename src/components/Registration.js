@@ -4,6 +4,11 @@ import { Input, Button, message, Form, Card } from 'antd';
 import axios from 'axios';
 import './Registration.css';
 import newBackgroundImage from '../assets/txn_history.svg'; 
+import {
+  MailFilled,
+  LockFilled,
+  UserOutlined,
+} from "@ant-design/icons";
 
 const Registration = () => {
   const [loading, setLoading] = useState(false);
@@ -55,19 +60,19 @@ const Registration = () => {
                   name="username"
                   rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                  <Input placeholder="Username" className="textbox" />
+                  <Input placeholder="Username" className="textbox" prefix={<UserOutlined/>}/>
                 </Form.Item>
                 <Form.Item
                   name="email"
                   rules={[{ required: true, message: 'Please input your email!' }]}
                 >
-                  <Input placeholder="Email" className="textbox" />
+                  <Input placeholder="Email" className="textbox" prefix={<MailFilled />}/>
                 </Form.Item>
                 <Form.Item
                   name="password"
                   rules={[{ required: true, message: 'Please input your password!' }]}
                 >
-                  <Input.Password placeholder="Password" className="textbox" />
+                  <Input.Password placeholder="Password" className="textbox" prefix={<LockFilled />}/>
                 </Form.Item>
                 <Form.Item>
                   <Button type="primary" htmlType="submit" loading={loading} className="comviva-button">

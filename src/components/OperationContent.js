@@ -14,6 +14,8 @@ const OperationContent = () => {
   const [username, setUsername] = useState("");
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [form] = Form.useForm();
+
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -67,10 +69,7 @@ const OperationContent = () => {
         message.error(response.data.message);
       } else {
         message.success("Points updated successfully");
-        setMemberId("");
-        setMemberName("");
-        setOperationType("");
-        setPoints("");
+        form.resetFields();
       }
     } catch (error) {
       message.error("Failed to update points. Please try again.");
@@ -83,7 +82,7 @@ const OperationContent = () => {
         <div className="flex-container">
           <div className="form-container">
             <h2>Update Member Points</h2>
-            <Form layout="vertical" onFinish={handleUpdatePoints}>
+            <Form form={form} layout="vertical" onFinish={handleUpdatePoints}>
               <Form.Item
                 label="Member"
                 name="member"

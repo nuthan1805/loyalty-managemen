@@ -61,6 +61,7 @@ const MainLayout = ({ onLogout }) => {
   }, []);
 
   const handleLogout = () => {
+    console.log('>>>>>>>>>>>>>>>>>>>logout token',localStorage.removeItem("token"))
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("email");

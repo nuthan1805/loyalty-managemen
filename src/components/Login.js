@@ -19,8 +19,10 @@ const Login = ({ onLogin }) => {
       const response = await axios.post('http://localhost:3000/auth/login', values);
       message.success('Login successful');
       localStorage.setItem('token', response.data.token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
       localStorage.setItem('username', response.data.username);
       localStorage.setItem('email', response.data.email);
+      console.log('TOKEN>>>>>>>>>>>>>>',response.data.token)
       onLogin();
       navigate('/');
     } catch (error) {

@@ -117,15 +117,7 @@ const AddMemberForm = () => {
     try {
       if (memberId) {
         await axios.put(`http://localhost:3000/members/${memberId}`, values);
-        await axios.post(`http://localhost:3000/transactions`, {
-          member_id: memberId,
-          name: values.name,
-          points_updated: values.points,
-          description: "Updated member points",
-          updated_by: username,
-          status: "success",
-        });
-        message.success("Member updated and transaction logged successfully.");
+        message.success("Member updated successfully.");
       } else {
         const response = await axios.post(
           "http://localhost:3000/members",
@@ -138,6 +130,7 @@ const AddMemberForm = () => {
           description: "Added new member",
           updated_by: username,
           status: "success",
+          type: "credit"
         });
         message.success("Member added and transaction logged successfully.");
       }

@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Input, Button, message, Form, Card } from 'antd';
-import axios from 'axios';
+import apiClient from '../apiClient'
 import './Login.css';
-import newBackgroundImage from '../assets/login_2.svg'; 
-import {
-  LockFilled,
-  UserOutlined,
-} from "@ant-design/icons";
+import newBackgroundImage from '../assets/login_2.svg';
+import { LockFilled, UserOutlined } from "@ant-design/icons";
+
 
 const Login = ({ onLogin }) => {
   const [loading, setLoading] = useState(false);
-  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 769); // Track screen size
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth > 769);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,8 +18,6 @@ const Login = ({ onLogin }) => {
     };
 
     window.addEventListener('resize', handleResize);
-
-    // Cleanup event listener on unmount
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -30,13 +26,11 @@ const Login = ({ onLogin }) => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:3000/auth/login', values);
+      const response = await apiClient.post('http://localhost:3000/auth/login', values);
       message.success('Login successful');
       localStorage.setItem('token', response.data.token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
       localStorage.setItem('username', response.data.username);
       localStorage.setItem('email', response.data.email);
-      console.log('TOKEN>>>>>>>>>>>>>>',response.data.token)
       onLogin();
       navigate('/');
     } catch (error) {
@@ -83,13 +77,13 @@ const Login = ({ onLogin }) => {
                   name="identifier"
                   rules={[{ required: true, message: 'Please input your username or email!' }]}
                 >
-                  <Input placeholder="Username or Email" className="textbox" prefix={<UserOutlined/>}/>
+                  <Input placeholder="Username or Email" className="textbox" prefix={<UserOutlined />} />
                 </Form.Item>
                 <Form.Item
                   name="password"
                   rules={[{ required: true, message: 'Please input your password!' }]}
                 >
-                  <Input.Password placeholder="Password" className="textbox" prefix={<LockFilled />}/>
+                  <Input.Password placeholder="Password" className="textbox" prefix={<LockFilled />} />
                 </Form.Item>
                 <Form.Item>
                   <Button type="primary" htmlType="submit" loading={loading} className="comviva-button">

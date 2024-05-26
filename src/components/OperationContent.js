@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Input, Select, Button, message, Form,Card } from "antd";
-import axios from "axios";
 import operationsIllustration from "../assets/points_update.png";
 import "./OperationContent.css";
+import apiClient from "../apiClient";
+
 
 const { Option } = Select;
 
@@ -27,7 +28,7 @@ const OperationContent = () => {
 
   const fetchMembers = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/members");
+      const response = await apiClient.get("http://localhost:3000/members");
       setMembers(response.data);
       setLoading(false);
     } catch (error) {
@@ -53,7 +54,7 @@ const OperationContent = () => {
           ? parseInt(points, 10)
           : -parseInt(points, 10);
 
-      const response = await axios.post("http://localhost:3000/transactions", {
+      const response = await apiClient.post("http://localhost:3000/transactions", {
         member_id: memberId,
         name: memberName,
         points_updated: Math.abs(updatedPoints),

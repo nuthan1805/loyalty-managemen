@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Select, Button, Card, Table, Tag } from "antd";
-import axios from "axios";
 import moment from "moment";
 import "./TransactionHistory.css";
 import HistoryImage from "../assets/txn_history.svg";
+import apiClient from "../apiClient";
+
 
 const { Option } = Select;
 
@@ -15,7 +16,7 @@ const TransactionHistory = () => {
   const [memberName, setMemberName] = useState("");
 
   useEffect(() => {
-    axios
+    apiClient
       .get("http://localhost:3000/members")
       .then((response) => {
         setMembers(response.data);
@@ -83,7 +84,7 @@ const TransactionHistory = () => {
 
   const handleViewHistory = () => {
     if (memberId) {
-      axios
+      apiClient
         .get(`http://localhost:3000/transactions/history/${memberId}`)
         .then((response) => {
           const lastFiveTransactions = response.data.slice(0, 5);

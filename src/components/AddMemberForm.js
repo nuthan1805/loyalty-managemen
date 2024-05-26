@@ -9,12 +9,9 @@ import {
   Modal,
   Form,
 } from "antd";
-import axios from "axios";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import "./AddMember.css";
-
-
-// style = {{color: darkTheme ? "white" : "black"}}
+import apiClient from "../apiClient";
 
 const { confirm } = Modal;
 
@@ -27,7 +24,7 @@ const AddMemberForm = () => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const [username, setUsername] = useState("");
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -42,7 +39,7 @@ const AddMemberForm = () => {
 
   const fetchMembers = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/members");
+      const response = await apiClient.get("http://localhost:3000/members");
       let filteredMembers = response.data;
       if (searchQuery) {
         filteredMembers = filteredMembers.filter(
@@ -65,7 +62,7 @@ const AddMemberForm = () => {
 
   const handleUpdate = async (memberId) => {
     try {
-      const response = await axios.get(
+      const response = await apiClient.get(
         `http://localhost:3000/members/${memberId}`
       );
       const member = response.data.data;
@@ -88,7 +85,7 @@ const AddMemberForm = () => {
       okType: "danger",
       cancelText: "No",
       onOk() {
-        axios
+        apiClient
           .delete(`http://localhost:3000/members/${memberId}`)
           .then(() => {
             setMembers(members.filter((member) => member.id !== memberId));
@@ -120,28 +117,35 @@ const AddMemberForm = () => {
   const handleCreate = async (values) => {
     try {
       if (memberId) {
-        await axios.put(`http://localhost:3000/members/${memberId}`, values);
-        message.success("Member updated successfully.");
+        await apiClient.put(`http://localhost:3000/members/${memberId}`, values);
+        await apiClient.post(`http://localhost:3000/transactions`, {
+          member_id: memberId,
+          name: values.name,
+          points_updated: values.points,
+          description: "Updated member points",
+          updated_by: username,
+          status: "success",
+        });
+        message.success("Member updated and transaction logged successfully.");
       } else {
-        const response = await axios.post(
+        const response = await apiClient.post(
           "http://localhost:3000/members",
           values
         );
-        await axios.post(`http://localhost:3000/transactions`, {
+        await apiClient.post(`http://localhost:3000/transactions`, {
           member_id: response.data.data.member_id,
           name: values.name,
           points_updated: values.points,
           description: "Added new member",
           updated_by: username,
           status: "success",
-          type: "credit"
         });
         message.success("Member added and transaction logged successfully.");
       }
       setVisible(false);
       form.resetFields();
       setMemberId("");
-      const response = await axios.get("http://localhost:3000/members");
+      const response = await apiClient.get("http://localhost:3000/members");
       setMembers(response.data);
     } catch (error) {
       message.error("Failed to perform action. Please try again.");

@@ -50,6 +50,11 @@ const TransactionHistory = () => {
       dataIndex: "type",
       key: "type",
       responsive: ['xs', 'sm', 'md', 'lg'],
+      filters: [
+        { text: 'Credited', value: 'credit' },
+        { text: 'Debited', value: 'debit' }
+      ],
+      onFilter: (value, record) => record.type === value,
       render: (type) => (
         <Tag color={type === "credit" ? "blue" : "orange"}>
           {type === "credit" ? "Credited" : "Debited"}

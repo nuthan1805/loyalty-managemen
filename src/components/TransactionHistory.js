@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Select, Button, Card, Table, Tag } from "antd";
 import moment from "moment";
+import { useMediaQuery } from "react-responsive";
+import { EyeOutlined } from "@ant-design/icons";
 import "./TransactionHistory.css";
 import HistoryImage from "../assets/txn_history.svg";
 import apiClient from "../apiClient";
-
 
 const { Option } = Select;
 
@@ -14,6 +15,8 @@ const TransactionHistory = () => {
   const [showTable, setShowTable] = useState(false);
   const [memberId, setMemberId] = useState("");
   const [memberName, setMemberName] = useState("");
+
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 550px)" });
 
   useEffect(() => {
     apiClient
@@ -114,6 +117,7 @@ const TransactionHistory = () => {
         <div className="input-group">
           <Select
             showSearch
+            className="select-dropdown"
             placeholder="Select Member ID"
             optionFilterProp="children"
             value={memberId}
@@ -134,14 +138,24 @@ const TransactionHistory = () => {
               </Option>
             ))}
           </Select>
-          <Button
-            className="history-btn"
-            type="primary"
-            onClick={handleViewHistory}
-            style={{ flexShrink: 0 }}
-          >
-            View History
-          </Button>
+          {isSmallScreen ? (
+            <Button
+              className="history-btn"
+              type="primary"
+              onClick={handleViewHistory}
+              icon={<EyeOutlined />}
+              style={{ flexShrink: 0 }}
+            />
+          ) : (
+            <Button
+              className="history-icon"
+              type="primary"
+              onClick={handleViewHistory}
+              style={{ flexShrink: 0 }}
+            >
+              View History
+            </Button>
+          )}
         </div>
         <div className="content-container">
           {showTable ? (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
@@ -38,7 +38,6 @@ import TransactionForm from "./components/TransactionForm";
 import AddMemberForm from "./components/AddMemberForm";
 import OperationContent from "./components/OperationContent";
 import TransactionHistory from "./components/TransactionHistory";
-import { calc } from "antd/es/theme/internal";
 import profileImage from "./assets/profile.svg";
 
 const { Header, Sider, Content } = Layout;
@@ -55,50 +54,13 @@ const MainLayout = ({ onLogout }) => {
   const location = useLocation();
   const [username, setUsername] = useState("");
 
-  useEffect(() => {
-    const storedUsername = localStorage.getItem("username");
-    if (storedUsername) {
-      setUsername(storedUsername);
-    }
-
-    const handleResize = () => {
-      if (window.innerWidth < 800) {
-        setCollapsed(true);
-      } else {
-        setCollapsed(false);
-      }
-
-      if (window.innerWidth < 671) {
-        setIsMobileView(true);
-      } else {
-        setIsMobileView(false);
-      }
-
-      if (window.innerWidth < 800) {
-        setHideDescription(true);
-      } else {
-        setHideDescription(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Initial check
-    handleResize();
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const handleLogout = () => {
-    console.log('>>>>>>>>>>>>>>>>>>>logout token',localStorage.removeItem("token"))
+  const handleLogout = useCallback(() => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("email");
     onLogout();
     navigate("/login");
-  };
+  }, [navigate, onLogout]);
 
   const showLogoutConfirmation = () => {
     Modal.confirm({
@@ -176,6 +138,67 @@ const MainLayout = ({ onLogout }) => {
 
   const currentTitle = pathToTitle[location.pathname] || "Loyalty Management";
   const currentDescription = pathToDescription[location.pathname] || "";
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+
+    const handleResize = () => {
+      if (window.innerWidth < 800) {
+        setCollapsed(true);
+      } else {
+        setCollapsed(false);
+      }
+
+      if (window.innerWidth < 671) {
+        setIsMobileView(true);
+      } else {
+        setIsMobileView(false);
+      }
+
+      if (window.innerWidth < 800) {
+        setHideDescription(true);
+      } else {
+        setHideDescription(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    const setLogoutTimeout = () => {
+      clearTimeout(window.inactivityTimeout);
+      window.inactivityTimeout = setTimeout(() => {
+        handleLogout();
+      }, 15 * 60 * 1000); 
+    };
+
+    const resetInactivityTimer = () => {
+      setLogoutTimeout();
+    };
+
+    window.addEventListener("mousemove", resetInactivityTimer);
+    window.addEventListener("keydown", resetInactivityTimer);
+    window.addEventListener("click", resetInactivityTimer);
+
+    setLogoutTimeout();
+
+    return () => {
+      clearTimeout(window.inactivityTimeout);
+      window.removeEventListener("mousemove", resetInactivityTimer);
+      window.removeEventListener("keydown", resetInactivityTimer);
+      window.removeEventListener("click", resetInactivityTimer);
+    };
+  }, [handleLogout]);
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -256,11 +279,12 @@ const MainLayout = ({ onLogout }) => {
             zIndex: "5",
             borderBottom: "1px solid #ECECEC",
             width: collapsed ? "calc(100% - 80px)" : "calc(100% - 200px)",
-            transition: "0.3s ease"
+            transition: "0.3s ease",
           }}
         >
           <div>
             <Button
+              className="hamburger_menu"
               type="text"
               icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
               onClick={() => setCollapsed(!collapsed)}
@@ -271,8 +295,8 @@ const MainLayout = ({ onLogout }) => {
               }}
             />
 
-            <span 
-            className="manage-title"
+            <span
+              className="manage-title"
               style={{
                 marginLeft: "10px",
                 color: "#394054",

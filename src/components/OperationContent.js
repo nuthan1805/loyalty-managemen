@@ -28,7 +28,7 @@ const OperationContent = () => {
 
   const fetchMembers = async () => {
     try {
-      const response = await apiClient.get("http://localhost:3000/members");
+      const response = await apiClient.get("https://loyalty-manager.onrender.com/members");
       setMembers(response.data);
       setLoading(false);
     } catch (error) {
@@ -54,7 +54,7 @@ const OperationContent = () => {
           ? parseInt(points, 10)
           : -parseInt(points, 10);
 
-      const response = await apiClient.post("http://localhost:3000/transactions", {
+      const response = await apiClient.post("https://loyalty-manager.onrender.com/transactions", {
         member_id: memberId,
         name: memberName,
         points_updated: Math.abs(updatedPoints),

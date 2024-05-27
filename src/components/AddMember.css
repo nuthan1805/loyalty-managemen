@@ -1,5 +1,38 @@
+.ant-modal {
+  max-width: 600px;
+}
+
+.ant-modal-title {
+  font-size: 1.5em;
+  margin-bottom: 0;
+}
+
+.ant-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.ant-form-item {
+  margin-bottom: 16px;
+}
+
+.ant-form-item-label > label {
+  font-weight: 600;
+  font-size: 13px !important;
+
+}
+
 @media(max-width: 420px){
-    .member-btn{
-      margin-left: 40px !important;
-    }
+  .member-btn{
+    margin-left: 40px !important;
   }
+}
+
+.ant-modal-title {
+  text-align: center;
+  font-size: 18px !important;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 10px; 
+}

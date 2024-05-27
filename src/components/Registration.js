@@ -31,7 +31,7 @@ const Registration = () => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:3000/auth/register', values);
+      const response = await axios.post('https://loyalty-manager.onrender.com/auth/register', values);
       localStorage.setItem('token', response.data.token);
       message.success('Registration successful! Please check your email for confirmation.');
       navigate('/login');

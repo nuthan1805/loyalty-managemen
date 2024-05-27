@@ -20,7 +20,7 @@ const TransactionHistory = () => {
 
   useEffect(() => {
     apiClient
-      .get("http://localhost:3000/members")
+      .get("https://loyalty-manager.onrender.com/members")
       .then((response) => {
         setMembers(response.data);
       })
@@ -93,7 +93,7 @@ const TransactionHistory = () => {
   const handleViewHistory = () => {
     if (memberId) {
       apiClient
-        .get(`http://localhost:3000/transactions/history/${memberId}`)
+        .get(`https://loyalty-manager.onrender.com/transactions/history/${memberId}`)
         .then((response) => {
           const lastFiveTransactions = response.data.slice(0, 5);
           setTransactions(lastFiveTransactions);

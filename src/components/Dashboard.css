@@ -34,11 +34,28 @@
 
 
   .kpi-chart {
-    height: 200px;
+    height: 252px;
   }
  
   .small-chart {
-    height: 150px;
+    height: 202px;
   }
+  
+  .dark-chart-card-content {
+    background-color: #001529;
+    color: white;
+    border: 1px solid #ececec;
+
+  }
+  
+  .dark-card {
+    background-color: #001529;
+    color: white;
+  }
+  
+  .dark-chart-container {
+    background-color: #001529;
+  }
+  
  
  

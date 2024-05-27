@@ -22,6 +22,7 @@ import {
   Switch,
   Tooltip,
   Avatar,
+  ConfigProvider,
 } from "antd";
 import {
   BrowserRouter as Router,
@@ -66,6 +67,7 @@ const MainLayout = ({ onLogout }) => {
     Modal.confirm({
       title: "Logout",
       content: "Are you sure you want to logout?",
+      className: darkTheme ? "dark-modal" : "",
       onOk: handleLogout,
       onCancel: () => {},
     });
@@ -86,7 +88,7 @@ const MainLayout = ({ onLogout }) => {
   };
 
   const profileMenu = (
-    <Menu>
+    <Menu className={darkTheme? 'profile':''}>
       {isMobileView && (
         <>
           <Menu.Item key="notifications">
@@ -201,181 +203,207 @@ const MainLayout = ({ onLogout }) => {
   }, [handleLogout]);
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
-      <Sider
-        style={{
-          borderRight: "2px solid #ECECEC",
-          position: "fixed",
-          left: 0,
-          top: 0,
-          bottom: 0,
-          transition: "0.3s ease",
-        }}
-        theme={darkTheme ? "dark" : "light"}
-        trigger={null}
-        collapsible
-        collapsed={collapsed}
-      >
-        <div className="logo-container">
-          {collapsed && <img src={logo} alt="Logo" className="logo" />}
-          {!collapsed && (
-            <span className="app-name">
-              <span
-                style={{
-                  color: "#ED1C24",
-                  fontSize: "20px",
-                  fontWeight: "700",
-                }}
-              >
-                MobiLytix
-              </span>
-              <span
-                style={{
-                  color: darkTheme ? "white" : "black",
-                  fontSize: "13px",
-                }}
-              >
-                {" "}
-                Rewards
-              </span>
-            </span>
-          )}
-        </div>
-        <Menu
-          theme={darkTheme ? "dark" : "light"}
-          style={{ fontSize: "13px", border: "none" }}
-          defaultSelectedKeys={[getPathnameKey()]}
-        >
-          <Menu.Item key="1" icon={<FontAwesomeIcon icon={faHome} />}>
-            <Link to="/">Dashboard</Link>
-          </Menu.Item>
-          <Menu.SubMenu
-            key="2"
-            icon={<FontAwesomeIcon icon={faMoneyCheckAlt} />}
-            title="Transaction Form"
-          >
-            <Menu.Item key="4">
-              <Link to="/add-member">Manage Member</Link>
-            </Menu.Item>
-            <Menu.Item key="5">
-              <Link to="/operation">Points Operation</Link>
-            </Menu.Item>
-          </Menu.SubMenu>
-          <Menu.Item key="3" icon={<FontAwesomeIcon icon={faHistory} />}>
-            <Link to="/transaction-history">Transaction History</Link>
-          </Menu.Item>
-        </Menu>
-      </Sider>
-
-      <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
-        <Header
+    <ConfigProvider
+      theme={{
+        token: {
+          colorBgBase: darkTheme ? "#001529" : "#FBFBFB",
+          colorTextBase: darkTheme ? "#FFFFFF" : "#000000",
+          colorBgContainer: darkTheme ? "#001529" : "#FFFFFF",
+          colorBgLayout :darkTheme ? "#001529" : "#FFFFFF",
+        },
+        components: {
+          Modal: {
+            colorBgElevated: darkTheme ? "#001529" : "#FFFFFF",
+          },
+          Dropdown: {
+            colorBgElevated: darkTheme ? "#001529" : "#FFFFFF",
+          },
+          Card:{
+            colorBgElevated: darkTheme ? "#001529" : "#FFFFFF",
+          },
+          Form: {
+            colorBgElevated: darkTheme ? "#001529" : "#FFFFFF",
+          }
+        },
+      }}
+    >
+      <Layout style={{ minHeight: "100vh" }}>
+        <Sider
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            background: "#FBFBFB",
-            padding: "0 24px",
+            borderRight: darkTheme ? "1px solid #ECECEC" : "1px solid #ECECEC",
             position: "fixed",
-            zIndex: "5",
-            borderBottom: "1px solid #ECECEC",
-            width: collapsed ? "calc(100% - 80px)" : "calc(100% - 200px)",
+            left: 0,
+            top: 0,
+            bottom: 0,
             transition: "0.3s ease",
           }}
+          theme={darkTheme ? "dark" : "light"}
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
         >
-          <div>
-            <Button
-              className="hamburger_menu"
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: "16px",
-                width: 64,
-                height: 64,
-              }}
-            />
-
-            <span
-              className="manage-title"
-              style={{
-                marginLeft: "10px",
-                color: "#394054",
-                fontSize: "20px",
-                fontWeight: "600",
-              }}
-            >
-              {currentTitle}
-            </span>
-            <br></br>
-            {!hideDescription && (
-              <span
-                style={{
-                  fontSize: "12px",
-                  position: "absolute",
-                  marginTop: "-45px",
-                  marginLeft: "75px",
-                  color: "#888",
-                }}
-              >
-                {currentDescription}
+          <div className="logo-container">
+            {collapsed && <img src={logo} alt="Logo" className="logo" />}
+            {!collapsed && (
+              <span className="app-name">
+                <span
+                  style={{
+                    color: "#ED1C24",
+                    fontSize: "20px",
+                    fontWeight: "700",
+                  }}
+                >
+                  MobiLytix
+                </span>
+                <span
+                  style={{
+                    color: darkTheme ? "white" : "black",
+                    fontSize: "13px",
+                  }}
+                >
+                  {" "}
+                  Rewards
+                </span>
               </span>
             )}
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            {!isMobileView && (
-              <>
-                <Tooltip title="No notifications yet">
-                  <FontAwesomeIcon
-                    icon={faBell}
+          <Menu
+            theme={darkTheme ? "dark" : "light"}
+            style={{ fontSize: "13px", border: "none" }}
+            defaultSelectedKeys={[getPathnameKey()]}
+          >
+            <Menu.Item key="1" icon={<FontAwesomeIcon icon={faHome} />}>
+              <Link to="/">Dashboard</Link>
+            </Menu.Item>
+            <Menu.SubMenu
+              key="2"
+              icon={<FontAwesomeIcon icon={faMoneyCheckAlt} />}
+              title="Transaction Form"
+            >
+              <Menu.Item key="4">
+                <Link to="/add-member">Manage Member</Link>
+              </Menu.Item>
+              <Menu.Item key="5">
+                <Link to="/operation">Points Operation</Link>
+              </Menu.Item>
+            </Menu.SubMenu>
+            <Menu.Item key="3" icon={<FontAwesomeIcon icon={faHistory} />}>
+              <Link to="/transaction-history">Transaction History</Link>
+            </Menu.Item>
+          </Menu>
+        </Sider>
+
+        <Layout style={{ marginLeft: collapsed ? 80 : 200  }}>
+          <Header
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              background: darkTheme ? "#001529" : "#FBFBFB",
+              padding: "0 24px",
+              position: "fixed",
+              zIndex: "5",
+              borderBottom: darkTheme ? "1px solid #ECECEC" : "1px solid #ECECEC",
+              width: collapsed ? "calc(100% - 80px)" : "calc(100% - 200px)",
+              transition: "0.3s ease",
+            }}
+          >
+            <div>
+              <Button
+                className="hamburger_menu"
+                type="text"
+                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                onClick={() => setCollapsed(!collapsed)}
+                style={{
+                  fontSize: "16px",
+                  width: 64,
+                  height: 64,
+                }}
+              />
+
+              <span
+                className="manage-title"
+                style={{
+                  marginLeft: "10px",
+                  color: darkTheme ? "#FFFFFF" : "#394054",
+                  fontSize: "20px",
+                  fontWeight: "600",
+                }}
+              >
+                {currentTitle}
+              </span>
+              <br></br>
+              {!hideDescription && (
+                <span
+                  style={{
+                    fontSize: "12px",
+                    position: "absolute",
+                    marginTop: "-45px",
+                    marginLeft: "75px",
+                    color: "#888",
+                  }}
+                >
+                  {currentDescription}
+                </span>
+              )}
+            </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {!isMobileView && (
+                <>
+                  <Tooltip color="black" title="No notifications yet">
+                    <FontAwesomeIcon
+                      icon={faBell}
+                      style={{
+                        marginRight: "20px",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                        color: darkTheme ? "#FFFFFF" : "#394054",
+                      }}
+                    />
+                  </Tooltip>
+                  <Dropdown overlay={profileMenu} trigger={["hover"]}>
+                    <Avatar style={{ cursor: "pointer" }} src={profileImage} />
+                  </Dropdown>
+                  <span
                     style={{
-                      marginRight: "20px",
-                      fontSize: "20px",
-                      cursor: "pointer",
+                      marginLeft: "10px",
+                      paddingRight: "10px",
+                      color: darkTheme ? "#FFFFFF" : "black",
                     }}
-                  />
-                </Tooltip>
+                  >
+                    {username}
+                  </span>
+                </>
+              )}
+              {isMobileView && (
                 <Dropdown overlay={profileMenu} trigger={["hover"]}>
                   <Avatar style={{ cursor: "pointer" }} src={profileImage} />
                 </Dropdown>
-                <span
-                  style={{
-                    marginLeft: "10px",
-                    paddingRight: "10px",
-                    color: "black",
-                  }}
-                >
-                  {username}
-                </span>
-              </>
-            )}
-            {isMobileView && (
-              <Dropdown overlay={profileMenu} trigger={["hover"]}>
-                <Avatar style={{ cursor: "pointer" }} src={profileImage} />
-              </Dropdown>
-            )}
-          </div>
-        </Header>
-        <Content
-          style={{
-            marginTop: "64px",
-            padding: 20,
-            minHeight: 280,
-            background: colorBgContainer,
-          }}
-        >
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/transaction-form" element={<TransactionForm />} />
-            <Route
-              path="/transaction-history"
-              element={<TransactionHistory />}
-            />
-            <Route path="/add-member" element={<AddMemberForm />} />
-            <Route path="/operation" element={<OperationContent />} />
-          </Routes>
-        </Content>
+              )}
+            </div>
+          </Header>
+          <Content
+            style={{
+              marginTop: "64px",
+              padding: 20,
+              minHeight: 280,
+              background: darkTheme ? "#001529" : "#FBFBFB"
+              }}
+          >
+            <Routes>
+              <Route path="/" element={<Dashboard darkTheme={darkTheme}/>} />
+              <Route path="/transaction-form" element={<TransactionForm />} />
+              <Route
+                path="/transaction-history"
+                element={<TransactionHistory />}
+              />
+              <Route path="/add-member" element={<AddMemberForm darkTheme={darkTheme}/>} />
+              <Route path="/operation" element={<OperationContent />} />
+            </Routes>
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </ConfigProvider>
   );
 };
 

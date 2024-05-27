@@ -15,7 +15,7 @@ import apiClient from "../apiClient";
 
 const { confirm } = Modal;
 
-const AddMemberForm = () => {
+const AddMemberForm = ({ darkTheme }) => {
   const [memberId, setMemberId] = useState("");
   const [points, setPoints] = useState("");
   const [description, setDescription] = useState("");
@@ -99,6 +99,7 @@ const AddMemberForm = () => {
       onCancel() {
         console.log("Cancel");
       },
+      className: darkTheme ? "dark-modal" : "",
     });
   };
 
@@ -126,7 +127,7 @@ const AddMemberForm = () => {
         const response = await apiClient.post(
           "https://loyalty-manager.onrender.com/members",
           { ...values, points: 0 }
-          );
+        );
         await apiClient.post(`https://loyalty-manager.onrender.com/transactions`, {
           member_id: response.data.data.member_id,
           name: values.name,
@@ -179,10 +180,10 @@ const AddMemberForm = () => {
       responsive: ["xs", "sm", "md", "lg"],
       render: (text, record) => (
         <Space size="middle">
-          <Tooltip title="Delete member">
+          <Tooltip color='black' title="Delete member">
             <DeleteOutlined onClick={() => handleDelete(record.member_id)} />
           </Tooltip>
-          <Tooltip title="Update member details">
+          <Tooltip color='black' title="Update member details">
             <EditOutlined onClick={() => handleUpdate(record.member_id)} />
           </Tooltip>
         </Space>
@@ -226,6 +227,7 @@ const AddMemberForm = () => {
             {memberId ? "Update" : "Create"}
           </Button>,
         ]}
+        className={darkTheme ? "dark-modal" : ""}
       >
         <Form form={form} onFinish={handleCreate} layout="vertical">
           {!memberId && (

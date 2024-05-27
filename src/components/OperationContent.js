@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Input, Select, Button, message, Form,Card } from "antd";
-import operationsIllustration from "../assets/points_update.png";
+import operationsIllustration from "../assets/login_2.svg";
 import "./OperationContent.css";
 import apiClient from "../apiClient";
 
@@ -82,7 +82,7 @@ const OperationContent = () => {
     <div className="background-container">
         <div className="flex-container">
           <div className="form-container">
-            <h2>Update Member Points</h2>
+            <h3>Update Member Points</h3>
             <Form form={form} layout="vertical" onFinish={handleUpdatePoints}>
               <Form.Item
                 label="Member"
@@ -154,7 +154,7 @@ const OperationContent = () => {
             />
           </div>
         </div>
-    </div>
+      </div>
     </Card>
   );
 };

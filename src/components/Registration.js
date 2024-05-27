@@ -9,6 +9,8 @@ import {
   LockFilled,
   UserOutlined,
 } from "@ant-design/icons";
+import comviva_text from '../assets/comviva_logo_text.png'
+
 
 const Registration = () => {
   const [loading, setLoading] = useState(false);
@@ -21,8 +23,6 @@ const Registration = () => {
     };
 
     window.addEventListener('resize', handleResize);
-
-    // Cleanup event listener on unmount
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -45,7 +45,9 @@ const Registration = () => {
   return (
     <div className="main-container">
       <div className="main-logo-container">
-        <div className="comviva-main-logo"></div>
+        <div className="comviva-main-logo">
+        <img src={comviva_text} alt="Side" />
+        </div>
       </div>
       <div className="main-background-container"></div>
       <div className="main-container-popup">

@@ -9,8 +9,9 @@ import {
   Modal,
   Form,
 } from "antd";
-import axios from "axios";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import "./AddMember.css"; 
+import apiClient from "../apiClient";
 
 const { confirm } = Modal;
 
@@ -23,7 +24,7 @@ const AddMemberForm = () => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const [username, setUsername] = useState("");
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -38,7 +39,7 @@ const AddMemberForm = () => {
 
   const fetchMembers = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/members");
+      const response = await apiClient.get("https://loyalty-manager.onrender.com/members");
       let filteredMembers = response.data;
       if (searchQuery) {
         filteredMembers = filteredMembers.filter(
@@ -61,8 +62,8 @@ const AddMemberForm = () => {
 
   const handleUpdate = async (memberId) => {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/members/${memberId}`
+      const response = await apiClient.get(
+        `https://loyalty-manager.onrender.com/members/${memberId}`
       );
       const member = response.data.data;
       setMemberId(member.member_id);
@@ -84,8 +85,8 @@ const AddMemberForm = () => {
       okType: "danger",
       cancelText: "No",
       onOk() {
-        axios
-          .delete(`http://localhost:3000/members/${memberId}`)
+        apiClient
+          .delete(`https://loyalty-manager.onrender.com/members/${memberId}`)
           .then(() => {
             setMembers(members.filter((member) => member.id !== memberId));
             fetchMembers();
@@ -116,35 +117,31 @@ const AddMemberForm = () => {
   const handleCreate = async (values) => {
     try {
       if (memberId) {
-        await axios.put(`http://localhost:3000/members/${memberId}`, values);
-        await axios.post(`http://localhost:3000/transactions`, {
-          member_id: memberId,
-          name: values.name,
-          points_updated: values.points,
-          description: "Updated member points",
-          updated_by: username,
-          status: "success",
-        });
-        message.success("Member updated and transaction logged successfully.");
-      } else {
-        const response = await axios.post(
-          "http://localhost:3000/members",
+        await apiClient.put(
+          `https://loyalty-manager.onrender.com/members/${memberId}`,
           values
         );
-        await axios.post(`http://localhost:3000/transactions`, {
+        message.success("Member details updated.");
+      } else {
+        const response = await apiClient.post(
+          "https://loyalty-manager.onrender.com/members",
+          { ...values, points: 0 }
+          );
+        await apiClient.post(`https://loyalty-manager.onrender.com/transactions`, {
           member_id: response.data.data.member_id,
           name: values.name,
           points_updated: values.points,
           description: "Added new member",
           updated_by: username,
           status: "success",
+          type : "credit"
         });
         message.success("Member added and transaction logged successfully.");
       }
       setVisible(false);
       form.resetFields();
       setMemberId("");
-      const response = await axios.get("http://localhost:3000/members");
+      const response = await apiClient.get("https://loyalty-manager.onrender.com/members");
       setMembers(response.data);
     } catch (error) {
       message.error("Failed to perform action. Please try again.");
@@ -156,25 +153,30 @@ const AddMemberForm = () => {
       title: "Member ID",
       dataIndex: "member_id",
       key: "member_id",
+      responsive: ["xs", "sm", "md", "lg"],
     },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      responsive: ["xs", "sm", "md", "lg"],
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
+      responsive: ["xs", "sm", "md", "lg"],
     },
     {
       title: "Points",
       dataIndex: "points",
       key: "points",
+      responsive: ["xs", "sm", "md", "lg"],
     },
     {
       title: "Action",
       key: "action",
+      responsive: ["xs", "sm", "md", "lg"],
       render: (text, record) => (
         <Space size="middle">
           <Tooltip title="Delete member">
@@ -196,6 +198,7 @@ const AddMemberForm = () => {
         style={{ width: 250, float: "right", marginBottom: "10px" }}
       />
       <Button
+        className="member-btn"
         type="primary"
         onClick={handleAddMember}
         style={{ marginBottom: "30px" }}
@@ -208,11 +211,12 @@ const AddMemberForm = () => {
         loading={loading}
         rowKey="id"
         pagination={{ pageSize: 4 }}
+        scroll={{ x: "max-content" }}
       />
 
       <Modal
         title={memberId ? "Update Member Details" : "Add New Member"}
-        visible={visible}
+        open={visible}
         onCancel={handleCancel}
         footer={[
           <Button key="cancel" onClick={handleCancel}>
@@ -230,7 +234,7 @@ const AddMemberForm = () => {
               label="Member ID"
               rules={[{ required: true, message: "Please enter member ID" }]}
             >
-              <Input />
+              <Input placeholder="Enter member ID" />
             </Form.Item>
           )}
           <Form.Item
@@ -238,21 +242,30 @@ const AddMemberForm = () => {
             label="Name"
             rules={[{ required: true, message: "Please enter member name" }]}
           >
-            <Input />
+            <Input placeholder="Enter member name" />
           </Form.Item>
           <Form.Item
             name="email"
             label="Email"
             rules={[{ required: true, message: "Please enter member email" }]}
           >
-            <Input />
+            <Input placeholder="Enter member email" />
           </Form.Item>
           <Form.Item
             name="points"
             label="Points"
-            rules={[{ required: true, message: "Please enter points" }]}
+            rules={[
+              {
+                required: true,
+                message: "Please enter points",
+              },
+              {
+                pattern: /^[0-9]*$/,
+                message: "Points should only contain numbers",
+              },
+            ]}
           >
-            <Input disabled={memberId}/>
+            <Input disabled={memberId} placeholder="Enter the points" />
           </Form.Item>
         </Form>
       </Modal>

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Container, Grid, Card, CardContent, Typography, Box } from '@mui/material';
 import { Line, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, LineElement, BarElement, PointElement, LinearScale, Title, CategoryScale, ArcElement, Tooltip, Legend } from 'chart.js';
 import supabase from '../SupabaseClient';
-import './Dashboard.css'; 
-import dashboard_image from "../assets/14245105_MyApril10.svg"
+import './Dashboard.css';
+import dashboard_image from "../assets/14245105_MyApril10.svg";
 
 ChartJS.register(LineElement, BarElement, PointElement, LinearScale, Title, CategoryScale, ArcElement, Tooltip, Legend);
 
@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [transactionTrends, setTransactionTrends] = useState({ labels: [], data: [] });
   const [memberTrends, setMemberTrends] = useState({ labels: [], data: [] });
   const [topUsers, setTopUsers] = useState([]);
+  const chartRef = useRef(null);
 
   useEffect(() => {
     const fetchTotalPoints = async () => {
@@ -135,14 +136,24 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
+  const createGradient = (ctx, area) => {
+    const gradient = ctx.createLinearGradient(0, area.top, 0, area.bottom);
+    gradient.addColorStop(0, 'rgba(131, 96, 195, 0.5)');
+    gradient.addColorStop(1, 'rgba(131, 96, 195, 0)');
+    return gradient;
+  };
+
   const transactionTrendData = {
     labels: transactionTrends.labels,
     datasets: [
       {
         label: 'Points Distributed Over Time',
         data: transactionTrends.data,
-        borderColor: '#3f51b5',
-        backgroundColor: 'rgba(63, 81, 181, 0.2)',
+        borderColor: 'blue',
+        backgroundColor: chartRef.current
+          ? createGradient(chartRef.current.ctx, chartRef.current.chartArea)
+          : 'rgba(131, 96, 195, 0.5)',
+        tension: 0.4,
         fill: true,
       },
     ],
@@ -168,9 +179,9 @@ const Dashboard = () => {
       {
         label: 'Total Members Over Time',
         data: memberTrends.data,
-        backgroundColor: 'rgba(153, 102, 255, 0.6)',
+        backgroundColor: 'rgba(153, 102, 255, 1)',
         borderColor: '#9966ff',
-        borderWidth: 1,
+        borderWidth: 2,
         fill: false,
       },
     ],
@@ -182,7 +193,7 @@ const Dashboard = () => {
       {
         label: 'Points',
         data: topUsers.map(user => user.points),
-        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+        backgroundColor: 'rgba(255, 99, 132, 1)',
       },
     ],
   };
@@ -202,7 +213,7 @@ const Dashboard = () => {
             <CardContent>
               <Typography variant="h6" align="center">Total Members</Typography>
               <Typography variant="h4" align="center">{totalMembers}</Typography>
-              <Box className="chart-container kpi-chart" style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)', padding: '20px', borderRadius: '10px' }}>
+              <Box className="chart-container kpi-chart" style={{ padding: '20px', borderRadius: '10px' }}>
                 <Line data={totalMembersData} />
               </Box>
             </CardContent>
@@ -212,8 +223,36 @@ const Dashboard = () => {
           <Card className="glass-card">
             <CardContent>
               <Typography variant="h6">Transaction Trends Over Time</Typography>
-              <Box className="chart-container wide-chart" style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)', padding: '20px', borderRadius: '10px' }}>
-                <Line className="" data={transactionTrendData} options={{ responsive: true, plugins: { tooltip: { mode: 'index', intersect: false } } }} />
+              <Box className="chart-container wide-chart" style={{ padding: '20px', borderRadius: '10px' }}>
+                <Line
+                  ref={chartRef}
+                  data={transactionTrendData}
+                  options={{
+                    responsive: true,
+                    plugins: {
+                      tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                      },
+                    },
+                    onResize: () => {
+                      if (chartRef.current) {
+                        chartRef.current.data.datasets[0].backgroundColor = createGradient(
+                          chartRef.current.ctx,
+                          chartRef.current.chartArea
+                        );
+                      }
+                    },
+                    onRender: () => {
+                      if (chartRef.current) {
+                        chartRef.current.data.datasets[0].backgroundColor = createGradient(
+                          chartRef.current.ctx,
+                          chartRef.current.chartArea
+                        );
+                      }
+                    },
+                  }}
+                />
               </Box>
             </CardContent>
           </Card>
@@ -221,8 +260,8 @@ const Dashboard = () => {
         <Grid item xs={12} md={6}>
           <Card className="glass-card">
             <CardContent>
-              <Typography variant="h6" style={{textAlign:'center'}}>Top Users</Typography>
-              <Box className="chart-container small-chart" style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)', padding: '10px', borderRadius: '10px', marginTop:'45px' }}>
+              <Typography variant="h6" style={{ textAlign: 'center' }}>Top Users</Typography>
+              <Box className="chart-container small-chart" style={{ padding: '10px', borderRadius: '10px', marginTop: '45px' }}>
                 <Bar data={topUsersData} options={{ indexAxis: 'y' }} />
               </Box>
             </CardContent>
@@ -233,7 +272,7 @@ const Dashboard = () => {
             <CardContent>
               <Typography variant="h6" align="center">Total Points Distributed</Typography>
               <Typography variant="h4" align="center">{totalPoints}</Typography>
-              <Box className="chart-container kpi-chart" style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)', padding: '20px', borderRadius: '10px' }}>
+              <Box className="chart-container kpi-chart" style={{ padding: '20px', borderRadius: '10px' }}>
                 <Bar data={totalPointsData} />
               </Box>
             </CardContent>

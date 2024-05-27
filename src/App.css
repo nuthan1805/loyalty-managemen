@@ -22,6 +22,31 @@
   color: black;
 }
 
+.profile{
+  border: 1px solid #ececec ;
+}
+
+.dark-modal .ant-modal-confirm-content {
+  background-color: #001529;
+  color: #FFFFFF;
+}
+
+.dark-modal .ant-modal-confirm-title {
+  background-color: #001529;
+  color: #FFFFFF;
+}
+
+.dark-modal .ant-modal-header,
+.dark-modal .ant-modal-body {
+  background-color: #001529; 
+}
+
+.dark-modal .ant-modal-content{
+  background-color: #001529; 
+  border: 1px solid #ececec;
+}
+
+
 @media (max-width: 420px) {
   .manage-title {
     font-size: 16px !important;

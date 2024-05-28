@@ -10,7 +10,7 @@ import {
   Form,
 } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import "./AddMember.css"; 
+import "./AddMember.css";
 import apiClient from "../apiClient";
 
 const { confirm } = Modal;
@@ -39,7 +39,7 @@ const AddMemberForm = ({ darkTheme }) => {
 
   const fetchMembers = async () => {
     try {
-      const response = await apiClient.get("https://loyalty-manager.onrender.com/members");
+      const response = await apiClient.get("/members");
       let filteredMembers = response.data;
       if (searchQuery) {
         filteredMembers = filteredMembers.filter(
@@ -62,9 +62,7 @@ const AddMemberForm = ({ darkTheme }) => {
 
   const handleUpdate = async (memberId) => {
     try {
-      const response = await apiClient.get(
-        `https://loyalty-manager.onrender.com/members/${memberId}`
-      );
+      const response = await apiClient.get(`/members/${memberId}`);
       const member = response.data.data;
       setMemberId(member.member_id);
       form.setFieldsValue({
@@ -86,7 +84,7 @@ const AddMemberForm = ({ darkTheme }) => {
       cancelText: "No",
       onOk() {
         apiClient
-          .delete(`https://loyalty-manager.onrender.com/members/${memberId}`)
+          .delete(`/members/${memberId}`)
           .then(() => {
             setMembers(members.filter((member) => member.id !== memberId));
             fetchMembers();
@@ -118,31 +116,28 @@ const AddMemberForm = ({ darkTheme }) => {
   const handleCreate = async (values) => {
     try {
       if (memberId) {
-        await apiClient.put(
-          `https://loyalty-manager.onrender.com/members/${memberId}`,
-          values
-        );
+        await apiClient.put(`/members/${memberId}`, values);
         message.success("Member details updated.");
       } else {
-        const response = await apiClient.post(
-          "https://loyalty-manager.onrender.com/members",
-          { ...values, points: 0 }
-        );
-        await apiClient.post(`https://loyalty-manager.onrender.com/transactions`, {
+        const response = await apiClient.post("/members", {
+          ...values,
+          points: 0,
+        });
+        await apiClient.post(`/transactions`, {
           member_id: response.data.data.member_id,
           name: values.name,
           points_updated: values.points,
           description: "Added new member",
           updated_by: username,
           status: "success",
-          type : "credit"
+          type: "credit",
         });
         message.success("Member added and transaction logged successfully.");
       }
       setVisible(false);
       form.resetFields();
       setMemberId("");
-      const response = await apiClient.get("https://loyalty-manager.onrender.com/members");
+      const response = await apiClient.get("/members");
       setMembers(response.data);
     } catch (error) {
       message.error("Failed to perform action. Please try again.");
@@ -173,6 +168,8 @@ const AddMemberForm = ({ darkTheme }) => {
       dataIndex: "points",
       key: "points",
       responsive: ["xs", "sm", "md", "lg"],
+      sorter: (a, b) => a.points - b.points,
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Action",
@@ -180,10 +177,10 @@ const AddMemberForm = ({ darkTheme }) => {
       responsive: ["xs", "sm", "md", "lg"],
       render: (text, record) => (
         <Space size="middle">
-          <Tooltip color='black' title="Delete member">
+          <Tooltip color="black" title="Delete member">
             <DeleteOutlined onClick={() => handleDelete(record.member_id)} />
           </Tooltip>
-          <Tooltip color='black' title="Update member details">
+          <Tooltip color="black" title="Update member details">
             <EditOutlined onClick={() => handleUpdate(record.member_id)} />
           </Tooltip>
         </Space>

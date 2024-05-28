@@ -20,7 +20,7 @@ const TransactionHistory = () => {
 
   useEffect(() => {
     apiClient
-      .get("https://loyalty-manager.onrender.com/members")
+      .get("/members")
       .then((response) => {
         setMembers(response.data);
       })
@@ -93,7 +93,7 @@ const TransactionHistory = () => {
   const handleViewHistory = () => {
     if (memberId) {
       apiClient
-        .get(`https://loyalty-manager.onrender.com/transactions/history/${memberId}`)
+        .get(`/transactions/history/${memberId}`)
         .then((response) => {
           const lastFiveTransactions = response.data.slice(0, 5);
           setTransactions(lastFiveTransactions);
@@ -120,7 +120,7 @@ const TransactionHistory = () => {
             className="select-dropdown"
             placeholder="Select Member ID"
             optionFilterProp="children"
-            value={memberId}
+            value={memberId || undefined}
             style={{ flex: 1, marginRight: "10px" }}
             onChange={handleMemberChange}
             filterOption={(input, option) =>

@@ -27,7 +27,7 @@ const Login = ({ onLogin }) => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await apiClient.post('https://loyalty-manager.onrender.com/auth/login', values);
+      const response = await apiClient.post('/auth/login', values);
       message.success('Login successful');
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('username', response.data.username);

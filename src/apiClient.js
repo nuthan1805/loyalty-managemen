@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const apiClient = axios.create();
+const apiClient = axios.create({
+  baseURL: 'https://loyalty-manager.onrender.com'
+});
 
 apiClient.interceptors.request.use(
   config => {

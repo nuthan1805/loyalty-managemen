@@ -10,6 +10,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import comviva_text from '../assets/comviva_logo_text.png'
+import apiClient from '../apiClient';
 
 
 const Registration = () => {
@@ -31,7 +32,7 @@ const Registration = () => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await axios.post('/auth/register', values);
+      const response = await apiClient.post('/auth/register', values);
       localStorage.setItem('token', response.data.token);
       message.success('Registration successful! Please check your email for confirmation.');
       navigate('/login');

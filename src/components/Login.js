@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Input, Button, message, Form, Card } from 'antd';
-import apiClient from '../apiClient'
-import './Login.css';
-import newBackgroundImage from '../assets/login_image.svg';
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { Input, Button, message, Form, Card } from "antd";
+import apiClient from "../apiClient";
+import "./Login.css";
+import newBackgroundImage from "../assets/login_image.svg";
 import { LockFilled, UserOutlined } from "@ant-design/icons";
-import comviva_text from '../assets/comviva_logo_text.png'
-
+import comviva_text from "../assets/comviva_logo_text.png";
 
 const Login = ({ onLogin }) => {
   const [loading, setLoading] = useState(false);
@@ -18,24 +17,29 @@ const Login = ({ onLogin }) => {
       setIsLargeScreen(window.innerWidth > 769);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await apiClient.post('/auth/login', values);
-      message.success('Login successful');
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('username', response.data.username);
-      localStorage.setItem('email', response.data.email);
+      const response = await apiClient.post("/auth/login", values);
+      message.success("Login successful");
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("username", response.data.username);
+      localStorage.setItem("email", response.data.email);
+      const storedUsername = localStorage.getItem("username");
+      const response2 = await apiClient.get(`/members/users/${storedUsername}`);
+      const user = response2.data.data;
+      console.log("Fetched User:", user);
+      localStorage.setItem("loginStatus", user.login_status);
       onLogin();
-      navigate('/');
+      navigate("/");
     } catch (error) {
-      message.error('Login failed. Please check your credentials.');
+      message.error("Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }
@@ -45,7 +49,7 @@ const Login = ({ onLogin }) => {
     <div className="main-container">
       <div className="main-logo-container">
         <div className="comviva-main-logo">
-        <img src={comviva_text} alt="Side" />
+          <img src={comviva_text} alt="Side" />
         </div>
       </div>
       <div className="main-background-container"></div>
@@ -78,23 +82,45 @@ const Login = ({ onLogin }) => {
               <Form onFinish={onFinish} className="login-form">
                 <Form.Item
                   name="identifier"
-                  rules={[{ required: true, message: 'Please input your username or email!' }]}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your username or email!",
+                    },
+                  ]}
                 >
-                  <Input placeholder="Username or Email" className="textbox" prefix={<UserOutlined />} />
+                  <Input
+                    placeholder="Username or Email"
+                    className="textbox"
+                    prefix={<UserOutlined />}
+                  />
                 </Form.Item>
                 <Form.Item
                   name="password"
-                  rules={[{ required: true, message: 'Please input your password!' }]}
+                  rules={[
+                    { required: true, message: "Please input your password!" },
+                  ]}
                 >
-                  <Input.Password placeholder="Password" className="textbox" prefix={<LockFilled />} />
+                  <Input.Password
+                    placeholder="Password"
+                    className="textbox"
+                    prefix={<LockFilled />}
+                  />
                 </Form.Item>
                 <Form.Item>
-                  <Button type="primary" htmlType="submit" loading={loading} className="comviva-button">
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    loading={loading}
+                    className="comviva-button"
+                  >
                     Sign In
                   </Button>
                 </Form.Item>
               </Form>
-              <p>Don't have an account? <Link to="/register">Register now!</Link></p>
+              <p>
+                Don't have an account? <Link to="/register">Register now!</Link>
+              </p>
             </Card>
           </div>
         </div>

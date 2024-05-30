@@ -46,6 +46,13 @@
   border: 1px solid #ececec;
 }
 
+.ant-menu-vertical .ant-menu-submenu-title{
+  padding-inline: 0 !important;
+  margin-left: -1px;
+}
+.ant-menu .ant-menu-submenu-arrow{
+  inset-inline-end: -2px;
+}
 
 @media (max-width: 420px) {
   .manage-title {

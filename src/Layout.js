@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
@@ -23,6 +23,7 @@ import {
   Tooltip,
   Avatar,
   ConfigProvider,
+  Tour,
 } from "antd";
 import {
   BrowserRouter as Router,
@@ -40,14 +41,23 @@ import AddMemberForm from "./components/AddMemberForm";
 import OperationContent from "./components/OperationContent";
 import TransactionHistory from "./components/TransactionHistory";
 import profileImage from "./assets/profile.svg";
+import apiClient from "./apiClient";
 
 const { Header, Sider, Content } = Layout;
 
 const MainLayout = ({ onLogout }) => {
+  const ref1 = useRef(null);
+  const refDashboard = useRef(null);
+  const refTransactionForm = useRef(null);
+  const refTransactionHistory = useRef(null);
+  const refBellIcon = useRef(null);
+  const refAvatarProfile = useRef(null);
+
   const [collapsed, setCollapsed] = useState(false);
   const [darkTheme, setDarkTheme] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
   const [hideDescription, setHideDescription] = useState(false);
+  const [isTourOpen, setIsTourOpen] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -59,6 +69,7 @@ const MainLayout = ({ onLogout }) => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("email");
+    localStorage.removeItem("loginStatus");
     onLogout();
     navigate("/login");
   }, [navigate, onLogout]);
@@ -202,6 +213,60 @@ const MainLayout = ({ onLogout }) => {
     };
   }, [handleLogout]);
 
+  useEffect(() => {
+    try {
+      const storedLoginStatus = localStorage.getItem("loginStatus");
+
+      if (storedLoginStatus === "0" || storedLoginStatus === "1") {
+        setIsTourOpen(true);
+        console.log("Opening tour...", storedLoginStatus);
+      } else {
+        setIsTourOpen(false);
+        console.log("Tour remains closed.");
+      }
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
+  }, []);
+
+  const handleCloseTour = () => {
+    localStorage.setItem("loginStatus", "2");
+    setIsTourOpen(false);
+  };
+
+  const tourSteps = [
+    {
+      title: "Dashboard",
+      description: " Your go-to for real-time metrics and insights, helping you make informed decisions and track progress towards goals.",
+      target: () => refDashboard.current,
+    },
+    {
+      title: "Toggle Sidebar",
+      description: "Customize your navigation experience with a simple click, maximizing screen space or accessing sections quickly.",
+      target: () => ref1.current,
+    },
+    {
+      title: "Transaction Form",
+      description: "This is where you can credit or debit points for members and update their details hassle-free. It's like managing a digital piggy bank, keeping track of who gets what, all with a few clicks.",
+      target: () => refTransactionForm.current,
+    },
+    {
+      title: "Transaction History",
+      description: " Access member specific transaction records for detailed analysis.",
+      target: () => refTransactionHistory.current,
+    },
+    {
+      title: "Notifications",
+      description: "Stay informed with timely alerts about important events and updates within your digital ecosystem.",
+      target: () => refBellIcon.current,
+    },
+    {
+      title: "User Profile",
+      description: "Choose between the soothing darkness of dark mode or the clarity of light mode to tailor your viewing experience. Once you're done, securely log out, knowing your preferences are saved for next time. It's your profile, your style.",
+      target: () => refAvatarProfile.current,
+    },
+  ];
+
   return (
     <ConfigProvider
       theme={{
@@ -273,27 +338,36 @@ const MainLayout = ({ onLogout }) => {
             defaultSelectedKeys={[getPathnameKey()]}
           >
             <Menu.Item key="1" icon={<FontAwesomeIcon icon={faHome} />}>
-              <Link to="/">Dashboard</Link>
+              <Link ref={refDashboard} to="/">
+                Dashboard
+              </Link>
             </Menu.Item>
-            <Menu.SubMenu
-              key="2"
-              icon={<FontAwesomeIcon icon={faMoneyCheckAlt} />}
-              title="Transaction Form"
-            >
-              <Menu.Item key="4">
-                <Link to="/add-member">Manage Member</Link>
-              </Menu.Item>
-              <Menu.Item key="5">
-                <Link to="/operation">Points Operation</Link>
-              </Menu.Item>
-            </Menu.SubMenu>
+            <Menu.Item>
+              <Link className="txnFormSubMenu" ref={refTransactionForm}>
+                <Menu.SubMenu
+                  key="2"
+                  icon={<FontAwesomeIcon icon={faMoneyCheckAlt} />}
+                  title="Transaction Form"
+                
+                >
+                    <Menu.Item key="4">
+                      <Link to="/add-member">Manage Member</Link>
+                    </Menu.Item>
+                    <Menu.Item key="5">
+                      <Link to="/operation">Points Operation</Link>
+                    </Menu.Item>
+                </Menu.SubMenu>
+              </Link>
+            </Menu.Item>
             <Menu.Item key="3" icon={<FontAwesomeIcon icon={faHistory} />}>
-              <Link to="/transaction-history">Transaction History</Link>
+              <Link ref={refTransactionHistory} to="/transaction-history">
+                Transaction History
+              </Link>
             </Menu.Item>
           </Menu>
         </Sider>
 
-        <Layout style={{ marginLeft: collapsed ? 80 : 200  }}>
+        <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
           <Header
             style={{
               display: "flex",
@@ -303,13 +377,16 @@ const MainLayout = ({ onLogout }) => {
               padding: "0 24px",
               position: "fixed",
               zIndex: "5",
-              borderBottom: darkTheme ? "1px solid #ECECEC" : "1px solid #ECECEC",
+              borderBottom: darkTheme
+                ? "1px solid #ECECEC"
+                : "1px solid #ECECEC",
               width: collapsed ? "calc(100% - 80px)" : "calc(100% - 200px)",
               transition: "0.3s ease",
             }}
           >
             <div>
               <Button
+                ref={ref1}
                 className="hamburger_menu"
                 type="text"
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -359,10 +436,20 @@ const MainLayout = ({ onLogout }) => {
                         cursor: "pointer",
                         color: darkTheme ? "#FFFFFF" : "#394054",
                       }}
+                      className="icon-bell"
+                      ref={refBellIcon}
                     />
                   </Tooltip>
-                  <Dropdown overlay={profileMenu} trigger={["hover"]}>
-                    <Avatar style={{ cursor: "pointer" }} src={profileImage} />
+                  <Dropdown
+                    overlay={profileMenu}
+                    trigger={["hover"]}
+                    className="avatar-profile"
+                  >
+                    <Avatar
+                      style={{ cursor: "pointer" }}
+                      src={profileImage}
+                      ref={refAvatarProfile}
+                    />
                   </Dropdown>
                   <span
                     style={{
@@ -376,8 +463,16 @@ const MainLayout = ({ onLogout }) => {
                 </>
               )}
               {isMobileView && (
-                <Dropdown overlay={profileMenu} trigger={["hover"]}>
-                  <Avatar style={{ cursor: "pointer" }} src={profileImage} />
+                <Dropdown
+                  overlay={profileMenu}
+                  trigger={["hover"]}
+                  className="avatar-profile"
+                >
+                  <Avatar
+                    style={{ cursor: "pointer" }}
+                    src={profileImage}
+                    ref={refAvatarProfile}
+                  />
                 </Dropdown>
               )}
             </div>
@@ -387,22 +482,27 @@ const MainLayout = ({ onLogout }) => {
               marginTop: "64px",
               padding: 20,
               minHeight: 280,
-              background: darkTheme ? "#001529" : "#FBFBFB"
-              }}
+              background: darkTheme ? "#001529" : "#FBFBFB",
+            }}
           >
             <Routes>
-              <Route path="/" element={<Dashboard darkTheme={darkTheme}/>} />
+              <Route path="/" element={<Dashboard darkTheme={darkTheme} />} />
               <Route path="/transaction-form" element={<TransactionForm />} />
               <Route
                 path="/transaction-history"
                 element={<TransactionHistory />}
               />
-              <Route path="/add-member" element={<AddMemberForm darkTheme={darkTheme}/>} />
+              <Route
+                path="/add-member"
+                element={<AddMemberForm darkTheme={darkTheme} />}
+              />
               <Route path="/operation" element={<OperationContent />} />
             </Routes>
           </Content>
         </Layout>
       </Layout>
+
+      <Tour steps={tourSteps} open={isTourOpen} onClose={handleCloseTour} />
     </ConfigProvider>
   );
 };

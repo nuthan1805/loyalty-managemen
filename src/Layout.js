@@ -161,8 +161,10 @@ const MainLayout = ({ onLogout }) => {
     const handleResize = () => {
       if (window.innerWidth < 800) {
         setCollapsed(true);
+        setIsTourOpen(false)
       } else {
         setCollapsed(false);
+        setIsTourOpen(true);
       }
 
       if (window.innerWidth < 671) {
